@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
     return (
-        <div>
-            <Button>ci</Button>
+        <div className="mx-auto p-8">
+            <Input placeholder="Search by name, email or role" />
         </div>
     );
 }
