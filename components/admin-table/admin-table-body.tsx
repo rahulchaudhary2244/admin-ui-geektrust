@@ -1,7 +1,6 @@
 "use client";
 
 import { User } from "@/types";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import {
     UserPen,
     Trash2,
@@ -13,6 +12,8 @@ import {
 import { Button } from "../ui/button";
 import { TableBody, TableRow, TableCell, TableFooter } from "../ui/table";
 import { useReducer } from "react";
+import { useSearchParams } from "next/navigation";
+import { Checkbox } from "../ui/checkbox";
 
 type Props = {
     data: User[];
@@ -35,11 +36,21 @@ export const AdminTableBody = ({ data }: Props) => {
         page: 1,
     });
 
-    const slicedUsers = users.slice(
+    const searchParams = useSearchParams();
+    const searchText = (searchParams.get("searchText") ?? "").toLowerCase();
+
+    const filteredUsers = users.filter(
+        ({ email, name, role }) =>
+            email.toLowerCase().includes(searchText) ||
+            name.toLowerCase().includes(searchText) ||
+            role.toLowerCase().includes(searchText)
+    );
+
+    const slicedUsers = filteredUsers.slice(
         page * ROWS_PER_PAGE - ROWS_PER_PAGE,
         page * ROWS_PER_PAGE
     );
-    const totalPages = getTotalPages(users);
+    const totalPages = getTotalPages(filteredUsers);
 
     const handleInlineDelete = (id: string) => {
         setState({ users: users.filter((user) => user.id !== id) });
@@ -76,12 +87,14 @@ export const AdminTableBody = ({ data }: Props) => {
         },
     ];
 
+    if (slicedUsers.length === 0) return <div>No Table Data</div>;
+
     return (
         <>
             <TableBody>
                 {slicedUsers.map(({ id, email, name, role }) => (
                     <TableRow key={id}>
-                        <TableCell>
+                        <TableCell className="w-[100px]">
                             <Checkbox />
                         </TableCell>
                         <TableCell>{name}</TableCell>
