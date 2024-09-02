@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Providers } from "@/providers/providers";
 
 export const metadata: Metadata = {
     title: "Admin UI App",
@@ -20,14 +21,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="dark">
-            <body
-                className={cn(
-                    "min-h-screen bg-background font-sans antialiased",
-                    fontSans.variable
-                )}
-            >
-                {children}
-            </body>
+            <Providers>
+                <body
+                    className={cn(
+                        "min-h-screen bg-background font-sans antialiased",
+                        fontSans.variable
+                    )}
+                >
+                    {children}
+                </body>
+            </Providers>
         </html>
     );
 }

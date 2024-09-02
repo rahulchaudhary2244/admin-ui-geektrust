@@ -1,5 +1,6 @@
 import { AdminTable } from "@/components/admin-table/admin-table";
 import { SearchInput } from "@/components/search-input";
+import { delay } from "@/lib/utils";
 import { Suspense } from "react";
 
 export default async function Home() {
